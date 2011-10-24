@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Job</title>
+		
+		<!--[if lt IE 9]><script language="javascript" type="text/javascript" src="excanvas.min.js"></script><![endif]-->
+		<script language="javascript" type="text/javascript" src="/static/date.js"></script>
+		<script language="javascript" type="text/javascript" src="/static/jquery.min.js"></script>
+		<script language="javascript" type="text/javascript" src="/static/jquery.flot.min.js"></script>
+		<script language="javascript" type="text/javascript" src="/static/jquery.flot.navigate.min.js"></script>
+		
+		<style type="text/css">
+			.graphCaption
+			{
+				font-family: sans-serif;
+				font-size: 16px;
+				margin-bottom: 14px;
+			}
+
+			#graphContainer
+			{
+				margin-left: auto;
+				margin-right: auto;
+			}
+
+			#jobHeader
+			{
+				font-family: sans-serif;
+				font-size: 24px;
+				margin-bottom: 10px;
+			}
+
+			#jobInfo
+			{
+				font-family: sans-serif;
+				font-size: 16px;
+				margin-bottom: 15px;
+			}
+		</style>
+	</head>
+	
+	<body>
+		<div id="graphContainer" style="width: 600px;">
+			<div id="jobHeader"></div>
+			<div style="float: right;">
+				<a href="/"><img src="/static/home.png" style="width: 32px; height: 32px; margin-top: 0em;" /></a>
+			</div>
+			<div id="jobInfo"></div>
+		</div>
+		
+		<script language="javascript" type="text/javascript">
+			var sensorData = new Object;
+			var previousPoint = null;
+			
+			function showTooltip(x, y, contents)
+			{
+				$('<div>')
+					.attr('id', 'tooltip')
+					.html(contents)
+					.css({
+						position: 'absolute',
+						display: 'none',
+						top: y + 5,
+						left: x + 5,
+						border: '1px solid #fdd',
+						padding: '2px',
+						'background-color': '#fee',
+						opacity: 0.80
+					})
+				.appendTo("body")
+				.fadeIn(0);
+			}
+
+			$(window).ready(function ()
+			{
+				$.get("/jobs/{{ guid }}", function(data)
+				{
+					var joinTimestamp = function(w,f,b) { return w+f/1000.0-b; };
+					var basetime = data['job'][0];
+					var ctr = 0;
+
+					// Fill in job info
+
+					var sdate = new Date();
+					sdate.setTime(basetime * 1000);
+					$('#jobHeader').html(
+						"Job started " + sdate.toString('MMMM d, yyyy h:mm:ss tt')
+					);
+
+					$('#jobInfo').html(
+						"<b>Host:</b> " + data['job'][1] + "<br/>" +
+						"<b>Owner:</b> " + data['job'][2]
+					);
+
+					// Collate data
+					gdata = data;
+
+					for(var i in data['config'])
+					{
+						var cobj = data['config'][i];
+						sensorData[cobj[0]] = new Object;
+						sensorData[cobj[0]].voltage = cobj[1];
+						sensorData[cobj[0]].description = cobj[2];
+						sensorData[cobj[0]].data = [];
+						sensorData[cobj[0]].markers = [];
+						sensorData[cobj[0]].domId = ctr;
+						ctr += 1;
+					}
+
+					for(var i in data['data'])
+					{
+						var cobj = data['data'][i];
+						sensorData[cobj[0]].data.push([joinTimestamp(cobj[1], cobj[2], basetime), cobj[3]]);
+					}
+					
+					// Create displays
+
+					for(var k in sensorData)
+					{
+						$('#graphContainer').append(
+							$	('<div>')
+								.html(sensorData[k].description + ' (' + k + ')')
+								.addClass('graphCaption')
+						);
+
+						$('#graphContainer').append(
+							$('<div>')
+								.attr('id', sensorData[k].domId)
+								.css('width', '600px')
+								.css('height', '150px')
+						);
+
+						$('#graphContainer').append(
+							"<br/>"
+						);
+
+						// Zoom/pan calculations
+						var minXRange = Math.abs(sensorData[k].data[0][0] - sensorData[k].data[1][0]);
+						var minX = sensorData[k].data[0][0], maxX = minX;
+						var minYRange = Math.abs(sensorData[k].data[0][1] - sensorData[k].data[1][1]);
+						var minY = sensorData[k].data[0][1], maxY = minY;
+
+						for(var j in sensorData[k].data)
+						{
+							if(j == 0) continue;
+
+							var prevX = sensorData[k].data[j-1][0];
+							var prevY = sensorData[k].data[j-1][1];
+							var thisX = sensorData[k].data[j][0];
+							var thisY = sensorData[k].data[j][1];
+
+							minXRange = Math.min(minXRange, Math.abs(prevX - thisX));
+							minYRange = Math.min(minYRange, Math.abs(prevY - thisY));
+							minX = Math.min(minX, thisX);
+							minY = Math.min(minY, thisY);
+							maxX = Math.max(maxX, thisX);
+							maxY = Math.max(maxY, thisY);
+						}
+
+						var maxXRange = maxX - minX;
+						var maxYRange = maxY - minY;
+
+						$.plot($('#'+sensorData[k].domId), [{data: sensorData[k].data}],
+						{
+							series: { points: { show: true } },
+							xaxis: { zoomRange: [minXRange, maxXRange], panRange: [minX, maxX], min: minX, max: maxX },
+							yaxis: { zoomRange: [minYRange, maxYRange*3], panRange: [minY-maxYRange, maxY+maxYRange], min: minY - maxYRange, max: maxY + maxYRange },
+							zoom: { interactive: true },
+							pan: { interactive: true },
+							grid: { hoverable: true, clickable: true }
+						});
+
+						$('#'+sensorData[k].domId).bind('plothover', function (event, pos, item)
+						{
+							if (item)
+							{
+								if(previousPoint != item.dataIndex)
+								{
+									previousPoint = item.dataIndex;
+									
+									$("#tooltip").remove();
+									var x = item.datapoint[0].toFixed(2),
+										y = item.datapoint[1].toFixed(2);
+										
+									showTooltip(item.pageX, item.pageY, "Time: " + x + "<br/>mA: " + y);
+								}
+								else
+								{
+									$("#tooltip").remove();
+									previousPoint = null;
+								}
+							}
+						});
+					}
+				}, "json");
+			});
+		</script>
+	</body>
+</html>
