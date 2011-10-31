@@ -173,7 +173,7 @@ int powermon_start(powermon_config_t* pcfg)
 	char job_host[256];
 
 	gethostname(job_host, 256);
-	sprintf(message, "start;%s;%s;%s;%s", job_host, pcfg->job_owner, pcfg->job_id, pcfg->job_process);
+	sprintf(message, "start;%s;%s;%s;%s", job_host, getenv(pcfg->job_owner), getenv(pcfg->job_id), getenv(pcfg->job_process));
 
 	int result = send_tcp_message(pcfg, message);
 
