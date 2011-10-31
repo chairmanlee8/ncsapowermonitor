@@ -3,9 +3,9 @@ if [ ! -d "build" ]; then
 fi
 
 rm -rf build/*
-g++ -c source/powermon.cpp -o build/powermon.o
+g++ -c source/powermon.cpp -lpthread -o build/powermon.o
 ar rvs build/powermon.a build/powermon.o
-g++ source/test_powermon.cpp build/powermon.a -o build/test_powermon
+g++ source/test_powermon.cpp build/powermon.a -lpthread -o build/test_powermon
 chmod +x build/test_powermon
 g++ source/monitor.cpp build/powermon.a -o build/monitor
 chmod +x build/monitor
