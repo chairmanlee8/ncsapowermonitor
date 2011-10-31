@@ -12,3 +12,12 @@ chmod +x build/monitor
 g++ source/test_monitor.cpp -o build/test_monitor
 chmod +x build/test_monitor
 cp source/sample_conf.conf build/sample_conf.conf
+
+mkdir build/powermon_server
+cp source/host.py build/powermon_server/
+cp source/display_server.py build/powermon_server/
+cp source/configuration.py build/powermon_server/
+cp source/device.py build/powermon_server/
+cp -R source/static build/powermon_server/static
+cp -R source/templates build/powermon_server/templates
+cp source/powermon_server.sh build/powermon_server/
