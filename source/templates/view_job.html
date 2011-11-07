@@ -129,7 +129,7 @@
 					{
 						var sum = 0.0;
 						for(var i in sensorData[k].data)
-							sum += sensorData[k].data[i][1];
+							sum += sensorData[k].data[i][1] / 1000.0;
 
 						sum /= sensorData[k].data.length;
 						sum *= sensorData[k].voltage;
