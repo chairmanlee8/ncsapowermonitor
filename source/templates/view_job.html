@@ -117,10 +117,10 @@
 					{
 						var cobj = data['markers'][i];
 						var xpos = joinTimestamp(cobj[0], cobj[1], basetime);
-						alert(xpos);
 
 						for(var k in sensorData)
 						{
+							alert(k);
 							sensorData[k].markers.push({xaxis: {from: xpos, to: xpos}, lineWidth: 1, color: "#000088"});
 						}
 					}
