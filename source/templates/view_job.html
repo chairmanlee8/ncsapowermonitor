@@ -93,7 +93,7 @@
 					);
 
 					// Collate data
-					gdata = data;
+					//gdata = data;
 
 					for(var i in data['config'])
 					{
@@ -123,15 +123,34 @@
 							sensorData[k].markers.push({xaxis: {from: xpos, to: xpos}, lineWidth: 1, color: "#000088"});
 						}
 					}
+
+					// Calculate aggregate datas
+					for(var k in sensorData)
+					{
+						var sum = 0.0;
+						for(var i in sensorData[k].data)
+							sum += sensorData[k].data[i][1];
+
+						sum /= sensorData[k].data.length;
+						sum *= sensorData[k].voltage;
+
+						sensorData[k].averagePower = sum;
+						sensorData[k].totalPower = sum * (sensorData[k].data[-1][0] - sensorData[k].data[0][0]) / 3600.0;
+					}
 					
 					// Create displays
 
 					for(var k in sensorData)
 					{
 						$('#graphContainer').append(
-							$	('<div>')
+							$('<div>')
 								.html(sensorData[k].description + ' (' + k + ')')
 								.addClass('graphCaption')
+						);
+
+						$('#graphContainer').append(
+							$('<div>')
+								.html('Average Power: ' + sensorData[k].averagePower.toFixed(2) + ' W, Total Consumed: ' + sensorData[k].totalPower + ' W-h')
 						);
 
 						$('#graphContainer').append(
