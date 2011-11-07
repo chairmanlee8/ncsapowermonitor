@@ -112,6 +112,12 @@
 						var cobj = data['data'][i];
 						sensorData[cobj[0]].data.push([joinTimestamp(cobj[1], cobj[2], basetime), cobj[3]]);
 					}
+
+					for(var i in data['markers'])
+					{
+						var xpos = joinTimestamp(cobj[0], cobj[1], basetime);
+						sensorData[cobj[0]].markers.push({xaxis: {from: xpos, to: xpos}});
+					}
 					
 					// Create displays
 
@@ -167,7 +173,7 @@
 							yaxis: { zoomRange: [minYRange, maxYRange*3], panRange: [minY-maxYRange, maxY+maxYRange], min: minY - maxYRange, max: maxY + maxYRange },
 							zoom: { interactive: true },
 							pan: { interactive: true },
-							grid: { hoverable: true, clickable: true }
+							grid: { hoverable: true, clickable: true, markings: sensorData[k].markers }
 						});
 
 						$('#'+sensorData[k].domId).bind('plothover', function (event, pos, item)
