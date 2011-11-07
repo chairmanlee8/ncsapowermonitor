@@ -46,7 +46,7 @@ class BufferConsumer(threading.Thread):
 							t, a = datum
 							u, m = split_timestamp(t)
 							cur.execute("""INSERT INTO power_data (device_sensor, time_unix, time_ms, amperage)
-								VALUES (%s,%s,%s,%s)""", (device_sensor(device_name, sensor), u, m, a[sensor['io_port']]))
+								VALUES (%s,%s,%s,%s)""", (device_sensor(device_name, sensor), u, m, a[int(sensor['io_port'])]))
 
 				self.db.commit()
 
