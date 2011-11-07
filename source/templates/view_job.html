@@ -118,6 +118,8 @@
 						var xpos = joinTimestamp(cobj[0], cobj[1], basetime);
 						sensorData[cobj[0]].markers.push({xaxis: {from: xpos, to: xpos}, lineWidth: 1, color: "#000088"});
 					}
+
+					sensorData[cobj[0]].markers.push({xaxis: {from: 5, to: 5}, lineWidth: 1, color: "#000088"});
 					
 					// Create displays
 
