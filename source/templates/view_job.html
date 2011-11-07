@@ -135,7 +135,7 @@
 						sum *= sensorData[k].voltage;
 
 						sensorData[k].averagePower = sum;
-						sensorData[k].totalPower = sum * (sensorData[k].data[-1][0] - sensorData[k].data[0][0]) / 3600.0;
+						sensorData[k].totalPower = sum * (sensorData[k].data[sensorData[k].data.length-1][0] - sensorData[k].data[0][0]) / 3600.0;
 					}
 					
 					// Create displays
