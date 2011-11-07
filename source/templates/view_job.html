@@ -173,7 +173,7 @@
 							yaxis: { zoomRange: [minYRange, maxYRange*3], panRange: [minY-maxYRange, maxY+maxYRange], min: minY - maxYRange, max: maxY + maxYRange },
 							zoom: { interactive: true },
 							pan: { interactive: true },
-							grid: { show: true, hoverable: true, clickable: true, markings: [{xaxis: {from: 3, to: 5}, color: #000088}] }
+							grid: { hoverable: true, clickable: true, markings: [{xaxis: {from: 3, to: 5}, color: "#000088"}] }
 						});
 
 						$('#'+sensorData[k].domId).bind('plothover', function (event, pos, item)
