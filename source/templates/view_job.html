@@ -116,7 +116,7 @@
 					for(var i in data['markers'])
 					{
 						var xpos = joinTimestamp(cobj[0], cobj[1], basetime);
-						sensorData[cobj[0]].markers.push({xaxis: {from: xpos, to: xpos}, color: "#000088"});
+						sensorData[cobj[0]].markers.push({xaxis: {from: xpos, to: xpos}, lineWidth: 1, color: "#000088"});
 					}
 					
 					// Create displays
