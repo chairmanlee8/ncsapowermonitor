@@ -166,13 +166,6 @@
 						var maxXRange = maxX - minX;
 						var maxYRange = maxY - minY;
 
-						var markings = [
-        { color: '#f6f6f6', yaxis: { from: 1 } },
-        { color: '#f6f6f6', yaxis: { to: -1 } },
-        { color: '#000', lineWidth: 1, xaxis: { from: 2, to: 2 } },
-        { color: '#000', lineWidth: 1, xaxis: { from: 8, to: 8 } }
-    ];
-
 						$.plot($('#'+sensorData[k].domId), [{data: sensorData[k].data}],
 						{
 							series: { points: { show: true } },
@@ -180,7 +173,12 @@
 							yaxis: { zoomRange: [minYRange, maxYRange*3], panRange: [minY-maxYRange, maxY+maxYRange], min: minY - maxYRange, max: maxY + maxYRange },
 							zoom: { interactive: true },
 							pan: { interactive: true },
-							grid: { hoverable: true, clickable: true, markings: markings }
+							grid: { hoverable: true, clickable: true, markings: [{yaxis: { from: -2.0, to: -1.0 },color: "#C11B17"},
+         {yaxis: { from: -1.0, to: 0.0 },color: "#FDD017"},
+         {yaxis: { from: 0.0, to: 1.0 },color: "#736AFF"},
+         {yaxis: { from: 1.0, to: 1.5 },color: "#4AA02C"},
+         {yaxis: { from: 1.5},color: "#842DCE"},
+        ] }
 						});
 
 						$('#'+sensorData[k].domId).bind('plothover', function (event, pos, item)
