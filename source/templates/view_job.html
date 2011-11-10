@@ -251,6 +251,9 @@
 								var targetAxes = plots[i].getAxes();
 								var props = ['xaxis', 'x2axis', 'yaxis', 'y2axis'];
 
+								console.log(targetOptions);
+								console.log(targetAxes);
+
 								for(var k in props)
 								{
 									if(!targetAxes[props[k]].used) continue;
