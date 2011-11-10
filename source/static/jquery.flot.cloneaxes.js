@@ -2,6 +2,7 @@
 	function init(plot) {
 		plot.cloneAxes = function (templatePlot) {
 			var options = templatePlot.getOptions();
+			var axes = templatePlot.getAxes();
 			var targetOptions = plot.getOptions();
 			var targetAxes = plot.getAxes();
 			var props = ['xaxis', 'yaxis'];
@@ -10,14 +11,14 @@
 			{
 				if(!targetAxes[props[k]].used) continue;
 
-				console.log(options[props[k]].min);
+				console.log(axes[props[k]].min);
 				console.log(targetOptions[props[k]].min);
 
-				targetOptions[props[k]].min = options[props[k]].min;
-				targetOptions[props[k]].max = options[props[k]].max;
+				targetOptions[props[k]].min = axes[props[k]].min;
+				targetOptions[props[k]].max = axes[props[k]].max;
 
 				console.log(targetOptions[props[k]].min);
-				conosle.log("done");
+				console.log("done");
 			}
 
 			plot.setupGrid();
