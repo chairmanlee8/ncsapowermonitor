@@ -164,13 +164,12 @@
 						$('#graphContainer').append(
 							$('<div>')
 								.attr('id', sensorData[k].domId)
+								.addClass('powerPlot')
 								.css('width', '600px')
 								.css('height', '150px')
 						);
 
-						$('#graphContainer').append(
-							"<br/>"
-						);
+						$('#graphContainer').append("<br/>");
 
 						// Zoom/pan calculations
 						var minXRange = Math.abs(sensorData[k].data[0][0] - sensorData[k].data[1][0]);
@@ -202,7 +201,7 @@
 						{
 							series: { points: { show: true } },
 							xaxis: { zoomRange: [minXRange, maxXRange], panRange: [minX, maxX], min: minX, max: maxX },
-							yaxis: { zoomRange: [minYRange, minYRange/*maxYRange*3*/], panRange: [minY-maxYRange, maxY+maxYRange], min: minY - maxYRange, max: maxY + maxYRange },
+							yaxis: { zoomRange: [minYRange, minYRange], panRange: [minY-maxYRange, maxY+maxYRange], min: minY - maxYRange, max: maxY + maxYRange },
 							zoom: { interactive: true },
 							pan: { interactive: true },
 							grid: { hoverable: true, clickable: true, markings: sensorData[k].markers }
@@ -230,6 +229,8 @@
 							}
 						});
 					}
+
+					$('powerPlot').bind('plotzoom', function() { alert("asdf"); });
 				}, "json");
 			});
 		</script>
