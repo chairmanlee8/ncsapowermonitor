@@ -1,7 +1,7 @@
 (function ($) {
 	function init(plot) {
 		plot.cloneAxes = function (templatePlot) {
-			var options = templatePlot.getOptions();
+			/*var options = templatePlot.getOptions();
 			var axes = templatePlot.getAxes();
 			var targetOptions = plot.getOptions();
 			var targetAxes = plot.getAxes();
@@ -10,17 +10,18 @@
 			for(var k in props)
 			{
 				if(!targetAxes[props[k]].used) continue;
-
 				targetOptions[props[k]].min = axes[props[k]].min;
 				targetOptions[props[k]].max = axes[props[k]].max;
 			}
 
 			console.log(plot.getPlaceholder().attr('id'));
-			console.log(plot.getAxes()['xaxis'].min);
+			console.log(plot.getAxes()['xaxis'].min);*/
+
+			plot.xaxes = templatePlot.getXAxes();
+			plot.yaxes = templatePlot.getYAxes();
 
 			plot.setupGrid();
 			console.log(plot.getAxes()['xaxis'].min);
-			console.log("setup");
 			plot.draw();
 		}
 	}
