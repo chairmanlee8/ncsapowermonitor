@@ -20,9 +20,9 @@
 			plot.xaxes = templatePlot.getXAxes();
 			plot.yaxes = templatePlot.getYAxes();
 
+			console.log(plot.getAxes()['xaxis'].min);
 			plot.setupGrid();
-			//console.log(plot.getAxes()['xaxis'].min);
-			console.log(plot.xaxes.min);
+			console.log(plot.getAxes()['xaxis'].min);
 			plot.draw();
 		}
 	}
