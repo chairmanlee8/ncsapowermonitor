@@ -237,17 +237,10 @@
 
 					// Plot zoom + pan synchronization
 					$('.powerPlot').bind('plotzoom', function(event, plot) {
-						if(!suppressZoom)
+						for(var i in plots)
 						{
-							suppressZoom = true;
-
-							for(var i in plots)
-							{
-								if(plots[i].getPlaceholder().attr('id') == $(this).attr('id')) continue;
-								plots[i].cloneAxes(plot);
-							}
-
-							suppressZoom = false;
+							if(plots[i].getPlaceholder().attr('id') == $(this).attr('id')) continue;
+							plots[i].cloneAxes(plot);
 						}
 					});
 				}, "json");
