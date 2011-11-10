@@ -236,13 +236,16 @@
 					}
 
 					// Plot zoom + pan synchronization
-					$('.powerPlot').bind('plotzoom', function(event, plot) {
+					syncAxes = function(event, plot) {
 						for(var i in plots)
 						{
 							if(plots[i].getPlaceholder().attr('id') == $(this).attr('id')) continue;
 							plots[i].cloneAxes(plot);
 						}
-					});
+					};
+
+					$('.powerPlot').bind('plotzoom', syncAxes);
+					$('.powerPlot').bind('plotpan', syncAxes);
 				}, "json");
 			});
 		</script>
