@@ -230,7 +230,14 @@
 						});
 					}
 
-					$('.powerPlot').bind('plotzoom', function() { alert("asdf"); });
+					// Plot zoom + pan synchronization
+					$('.powerPlot').bind('plotzoom', function(event, plot) { 
+						var options = plot.getOptions();
+						var zAmount = options.zoom.amount;
+						var zCenter = options.zoom.center;
+
+						$('.powerPlot').not(this).zoom({center: zCenter, amount: zAmount});
+					});
 				}, "json");
 			});
 		</script>
