@@ -253,8 +253,9 @@
 
 								for(var k in props)
 								{
-									targetOptions[k].min = options[k].min;
-									targetOptions[k].max = options[k].max;
+									if(!targetAxes[props[k]].used) continue;
+									targetOptions[props[k]].min = options[props[k]].min;
+									targetOptions[props[k]].max = options[props[k]].max;
 								}
 
 								plots[i].setupGrid();
