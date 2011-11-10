@@ -11,15 +11,11 @@
 			{
 				if(!targetAxes[props[k]].used) continue;
 
-				console.log(axes[props[k]].min);
-				console.log(targetOptions[props[k]].min);
-
 				targetOptions[props[k]].min = axes[props[k]].min;
 				targetOptions[props[k]].max = axes[props[k]].max;
-
-				console.log(targetOptions[props[k]].min);
-				console.log("done");
 			}
+
+			console.log(plot.getOptions()['xaxis'].min);
 
 			plot.setupGrid();
 			plot.draw();
