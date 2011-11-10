@@ -1,4 +1,4 @@
-from flask import Flask, url_for, render_template	
+from flask import Flask, url_for, render_template, g	
 
 import MySQLdb
 import json
@@ -13,8 +13,18 @@ DATABASE_NAME = "power"
 DATABASE_USER = "poweradmin"
 DATABASE_PASS = "power"
 
-db = MySQLdb.connect(host=DATABASE_HOST, port=DATABASE_PORT, db=DATABASE_NAME, user=DATABASE_USER, passwd=DATABASE_PASS)
-cur = db.cursor()
+def connect_db():
+	return MySQLdb.connect(host=DATABASE_HOST, port=DATABASE_PORT, db=DATABASE_NAME, user=DATABASE_USER, passwd=DATABASE_PASS)
+
+@app.before_request
+def before_request():
+	g.db = connect_db()
+	g.cur = g.db.cursor()
+
+@app.teardown_request
+def teardown_request():
+	if hasattr(g, 'cur'): g.cur.close()
+	if hasattr(g, 'db'): g.db.close()
 
 app = Flask(__name__)
 
@@ -29,20 +39,20 @@ def view_job(guid):
 
 @app.route("/jobs/all")
 def jobs_all():
-	cur.execute('SELECT * FROM job_data ORDER BY job_started DESC')
-	rows = cur.fetchall()
+	g.cur.execute('SELECT * FROM job_data ORDER BY job_started DESC')
+	rows = g.cur.fetchall()
 
 	return json.dumps(rows, default=dthandler)
 	
 @app.route("/jobs/<int:guid>")
 def jobs_data(guid):
 	# Get job data
-	cur.execute('SELECT UNIX_TIMESTAMP(job_started), job_host, job_owner, job_id, job_process FROM job_data WHERE guid = %s', (guid,))
-	job = cur.fetchall()
+	g.cur.execute('SELECT UNIX_TIMESTAMP(job_started), job_host, job_owner, job_id, job_process FROM job_data WHERE guid = %s', (guid,))
+	job = g.cur.fetchall()
 
 	# Get markers for this job_id
-	cur.execute('SELECT time_unix, time_ms, name, marker_type FROM marker_data WHERE guid = %s ORDER BY time_unix ASC', (guid,))
-	markers = cur.fetchall()
+	g.cur.execute('SELECT time_unix, time_ms, name, marker_type FROM marker_data WHERE guid = %s ORDER BY time_unix ASC', (guid,))
+	markers = g.cur.fetchall()
 
 	time_start = 0
 	time_end = 0
@@ -55,12 +65,12 @@ def jobs_data(guid):
 		time_end = int(markers[-1][0])
 	
 	# Get data for job_id between marker extremes
-	cur.execute('SELECT device_sensor, time_unix, time_ms, amperage FROM power_data WHERE time_unix >= %s AND time_unix <= %s ORDER BY device_sensor ASC, time_unix ASC', (time_start, time_end))
-	data = cur.fetchall()
+	g.cur.execute('SELECT device_sensor, time_unix, time_ms, amperage FROM power_data WHERE time_unix >= %s AND time_unix <= %s ORDER BY device_sensor ASC, time_unix ASC', (time_start, time_end))
+	data = g.cur.fetchall()
 
 	# Get configuration data
-	cur.execute('SELECT device_sensor, voltage, description FROM conf_data_sensor WHERE guid = %s ORDER BY device_sensor ASC', (guid,))
-	configs = cur.fetchall()
+	g.cur.execute('SELECT device_sensor, voltage, description FROM conf_data_sensor WHERE guid = %s ORDER BY device_sensor ASC', (guid,))
+	configs = g.cur.fetchall()
 	
 	# Return data in JSON form
 	return json.dumps({'data': data, 'config': configs, 'markers': markers, 'job': job[0]})
