@@ -8,6 +8,7 @@
 		<script language="javascript" type="text/javascript" src="/static/jquery.min.js"></script>
 		<script language="javascript" type="text/javascript" src="/static/jquery.flot.min.js"></script>
 		<script language="javascript" type="text/javascript" src="/static/jquery.flot.navigate.min.js"></script>
+		<script language="javascript" type="text/javascript" src="/static/jquery.flot.cloneaxes.js"></script>
 		
 		<style type="text/css">
 			.graphCaption
@@ -238,35 +239,12 @@
 					$('.powerPlot').bind('plotzoom', function(event, plot) {
 						if(!suppressZoom)
 						{
-							var options = plot.getOptions();
-							var axes = plot.getAxes();
-
 							suppressZoom = true;
 
 							for(var i in plots)
 							{
 								if(plots[i].getPlaceholder().attr('id') == $(this).attr('id')) continue;
-
-								var targetOptions = plots[i].getOptions();
-								var targetAxes = plots[i].getAxes();
-								var props = ['xaxis', 'yaxis'];
-
-								console.log(targetOptions);
-								console.log(targetAxes);
-
-								for(var k in props)
-								{
-									if(!targetAxes[props[k]].used) continue;
-									targetOptions[props[k]].min = options[props[k]].min;
-									targetOptions[props[k]].max = options[props[k]].max;
-								}
-
-								console.log(targetOptions);
-								plots[i].parseOptions(targetOptions);
-								console.log(plots[i].getOptions());
-
-								plots[i].setupGrid();
-								plots[i].draw();
+								plots[i].cloneAxes(plot);
 							}
 
 							suppressZoom = false;
