@@ -164,7 +164,7 @@
 
 						$('#graphContainer').append(
 							$('<div>')
-								.attr('id', sensorData[k].domId)
+								.attr('id', 'plot' + sensorData[k].domId)
 								.addClass('powerPlot')
 								.css('width', '600px')
 								.css('height', '150px')
@@ -198,7 +198,7 @@
 						var maxXRange = maxX - minX;
 						var maxYRange = maxY - minY;
 
-						var thisPlot = $.plot($('#'+sensorData[k].domId), [{data: sensorData[k].data}],
+						var thisPlot = $.plot($('#plot'+sensorData[k].domId), [{data: sensorData[k].data}],
 						{
 							series: { points: { show: true } },
 							xaxis: { zoomRange: [minXRange, maxXRange], panRange: [minX, maxX], min: minX, max: maxX },
@@ -210,7 +210,7 @@
 
 						plots.push(thisPlot);
 
-						$('#'+sensorData[k].domId).bind('plothover', function (event, pos, item)
+						$('#plot'+sensorData[k].domId).bind('plothover', function (event, pos, item)
 						{
 							if (item)
 							{
@@ -241,7 +241,7 @@
 
 						for(var i in plots)
 						{
-							if(plots[i].getPlaceholder() == $(this)) continue;
+							if(plots[i].getPlaceholder().attr('id') == $(this).attr('id')) continue;
 							plots[i].zoom({center: zCenter, amount: zAmount});
 						}
 					});
