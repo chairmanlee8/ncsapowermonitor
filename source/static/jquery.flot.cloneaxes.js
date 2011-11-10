@@ -16,7 +16,7 @@
 	$.plot.plugins.push({
 		init: init,
 		options: {},
-		name: 'navigate',
+		name: 'cloneaxes',
 		version: '1.0'
 	});
 })(jQuery);
