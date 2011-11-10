@@ -59,6 +59,7 @@
 			var sensorData = new Object;
 			var previousPoint = null;
 			var plots = [];
+			var suppressZoom = false;
 			
 			function showTooltip(x, y, contents)
 			{
@@ -234,16 +235,22 @@
 					}
 
 					// Plot zoom + pan synchronization
-					$('.powerPlot').bind('plotzoom', function(event, plot) { 
-						var options = plot.getOptions();
-						var zAmount = options.zoom.amount;
-						var zCenter = options.zoom.center;
-
-						for(var i in plots)
+					$('.powerPlot').bind('plotzoom', function(event, plot) {
+						if(!suppressZoom)
 						{
-							alert($(this).attr('id') + '==' + plots[i].getPlaceholder().attr('id'));
-							if(plots[i].getPlaceholder().attr('id') == $(this).attr('id')) continue;
-							plots[i].zoom({center: zCenter, amount: zAmount});
+							var options = plot.getOptions();
+							var zAmount = options.zoom.amount;
+							var zCenter = options.zoom.center;
+
+							suppressZoom = true;
+
+							for(var i in plots)
+							{
+								if(plots[i].getPlaceholder().attr('id') == $(this).attr('id')) continue;
+								plots[i].zoom({center: zCenter, amount: zAmount});
+							}
+
+							suppressZoom = false;
 						}
 					});
 				}, "json");
