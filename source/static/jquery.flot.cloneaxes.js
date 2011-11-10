@@ -6,14 +6,21 @@
 			var targetAxes = plot.getAxes();
 			var props = ['xaxis', 'yaxis'];
 
-			console.log(options);
+			for(var k in props)
+			{
+				if(!targetAxes[props[k]].used) continue;
 
-			plot.getOptions().xaxes = templatePlot.getOptions().xaxes;
-			plot.getOptions().yaxes = templatePlot.getOptions().yaxes;
+				console.log(options[props[k]].min);
+				console.log(targetOptions[props[k]].min);
 
-			console.log(targetOptions);
+				targetOptions[props[k]].min = options[props[k]].min;
+				targetOptions[props[k]].max = options[props[k]].max;
 
-			//plot.setupGrid();
+				console.log(targetOptions[props[k]].min);
+				conosle.log("done");
+			}
+
+			plot.setupGrid();
 			plot.draw();
 		}
 	}
