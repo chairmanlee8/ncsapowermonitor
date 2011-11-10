@@ -241,6 +241,7 @@
 
 						for(var i in plots)
 						{
+							alert($(this).attr('id'));
 							if(plots[i].getPlaceholder().attr('id') == $(this).attr('id')) continue;
 							plots[i].zoom({center: zCenter, amount: zAmount});
 						}
