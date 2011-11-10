@@ -8,13 +8,8 @@
 
 			console.log(options);
 
-			for(var k in props)
-			{
-				if(!targetAxes[props[k]].used) continue;
-
-				targetOptions[props[k]].min = options[props[k]].min;
-				targetOptions[props[k]].max = options[props[k]].max;
-			}
+			plot.getOptions().xaxes = templatePlot.getOptions().xaxes;
+			plot.getOptions().yaxes = templatePlot.getOptions().yaxes;
 
 			console.log(targetOptions);
 
