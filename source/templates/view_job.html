@@ -202,7 +202,7 @@
 						{
 							series: { points: { show: true } },
 							xaxis: { zoomRange: [minXRange, maxXRange], panRange: [minX, maxX], min: minX, max: maxX },
-							yaxis: { zoomRange: [minYRange, maxYRange*3], panRange: [minY-maxYRange, maxY+maxYRange], min: minY - maxYRange, max: maxY + maxYRange },
+							yaxis: { zoomRange: [minYRange, minYRange/*maxYRange*3*/], panRange: [minY-maxYRange, maxY+maxYRange], min: minY - maxYRange, max: maxY + maxYRange },
 							zoom: { interactive: true },
 							pan: { interactive: true },
 							grid: { hoverable: true, clickable: true, markings: sensorData[k].markers }
