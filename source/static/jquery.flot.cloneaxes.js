@@ -21,7 +21,8 @@
 			plot.yaxes = templatePlot.getYAxes();
 
 			plot.setupGrid();
-			console.log(plot.getAxes()['xaxis'].min);
+			//console.log(plot.getAxes()['xaxis'].min);
+			console.log(plot.xaxes.min);
 			plot.draw();
 		}
 	}
