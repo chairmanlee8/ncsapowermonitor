@@ -15,7 +15,7 @@
 				targetOptions[props[k]].max = axes[props[k]].max;
 			}
 
-			console.log(plot.getPlaceholder.attr('id'));
+			console.log(plot.getPlaceholder().attr('id'));
 			console.log(plot.getOptions()['xaxis'].min);
 
 			plot.setupGrid();
