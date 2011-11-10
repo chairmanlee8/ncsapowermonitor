@@ -16,10 +16,10 @@
 			}
 
 			console.log(plot.getPlaceholder().attr('id'));
-			console.log(plot.getOptions()['xaxis'].min);
+			console.log(plot.getAxes()['xaxis'].min);
 
 			plot.setupGrid();
-			console.log(plot.getOptions()['xaxis'].min);
+			console.log(plot.getAxes()['xaxis'].min);
 			console.log("setup");
 			plot.draw();
 		}
