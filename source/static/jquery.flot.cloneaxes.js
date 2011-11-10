@@ -17,8 +17,8 @@
 			console.log(plot.getPlaceholder().attr('id'));
 			console.log(plot.getAxes()['xaxis'].min);*/
 
-			plot.options.xaxes = templatePlot.options.xaxes;
-			plot.options.yaxes = templatePlot.options.yaxes;
+			plot.options = templatePlot.options;
+			plot.options = templatePlot.options;
 
 			console.log(plot.getAxes()['xaxis'].min);
 			plot.setupGrid();
