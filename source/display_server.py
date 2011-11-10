@@ -24,7 +24,7 @@ def before_request():
 	g.cur = g.db.cursor()
 
 @app.teardown_request
-def teardown_request():
+def teardown_request(exception):
 	if hasattr(g, 'cur'): g.cur.close()
 	if hasattr(g, 'db'): g.db.close()
 
