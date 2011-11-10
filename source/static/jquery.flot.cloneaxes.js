@@ -11,8 +11,8 @@
 			{
 				if(!targetAxes[props[k]].used) continue;
 
-				targetOptions[props[k]].min = axes[props[k]].min;
-				targetOptions[props[k]].max = axes[props[k]].max;
+				targetAxes[props[k]].min = axes[props[k]].min;
+				targetAxes[props[k]].max = axes[props[k]].max;
 			}
 
 			console.log(plot.getOptions()['xaxis'].min);
