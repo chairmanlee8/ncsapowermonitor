@@ -16,6 +16,8 @@ DATABASE_PASS = "power"
 def connect_db():
 	return MySQLdb.connect(host=DATABASE_HOST, port=DATABASE_PORT, db=DATABASE_NAME, user=DATABASE_USER, passwd=DATABASE_PASS)
 
+app = Flask(__name__)
+
 @app.before_request
 def before_request():
 	g.db = connect_db()
@@ -25,8 +27,6 @@ def before_request():
 def teardown_request():
 	if hasattr(g, 'cur'): g.cur.close()
 	if hasattr(g, 'db'): g.db.close()
-
-app = Flask(__name__)
 
 @app.route("/")
 def index():
