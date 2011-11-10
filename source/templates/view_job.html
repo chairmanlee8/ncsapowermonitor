@@ -60,6 +60,16 @@
 			var previousPoint = null;
 			var plots = [];
 			var suppressZoom = false;
+
+			Object.prototype.clone = function() {
+  var newObj = (this instanceof Array) ? [] : {};
+  for (i in this) {
+    if (i == 'clone') continue;
+    if (this[i] && typeof this[i] == "object") {
+      newObj[i] = this[i].clone();
+    } else newObj[i] = this[i]
+  } return newObj;
+};
 			
 			function showTooltip(x, y, contents)
 			{
@@ -247,7 +257,7 @@
 							{
 								if(plots[i].getPlaceholder().attr('id') == $(this).attr('id')) continue;
 
-								var targetOptions = plots[i].getOptions();
+								var targetOptions = plots[i].getOptions().clone();
 								var targetAxes = plots[i].getAxes();
 								var props = ['xaxis', 'yaxis'];
 
@@ -262,6 +272,7 @@
 								}
 
 								console.log(targetOptions);
+								plots[i].parseOptions(targetOptions);
 								console.log(plots[i].getOptions());
 
 								plots[i].setupGrid();
