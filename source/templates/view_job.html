@@ -58,6 +58,7 @@
 		<script language="javascript" type="text/javascript">
 			var sensorData = new Object;
 			var previousPoint = null;
+			var plots = [];
 			
 			function showTooltip(x, y, contents)
 			{
@@ -197,7 +198,7 @@
 						var maxXRange = maxX - minX;
 						var maxYRange = maxY - minY;
 
-						$.plot($('#'+sensorData[k].domId), [{data: sensorData[k].data}],
+						var thisPlot = $.plot($('#'+sensorData[k].domId), [{data: sensorData[k].data}],
 						{
 							series: { points: { show: true } },
 							xaxis: { zoomRange: [minXRange, maxXRange], panRange: [minX, maxX], min: minX, max: maxX },
@@ -206,6 +207,8 @@
 							pan: { interactive: true },
 							grid: { hoverable: true, clickable: true, markings: sensorData[k].markers }
 						});
+
+						plots.append(thisPlot);
 
 						$('#'+sensorData[k].domId).bind('plothover', function (event, pos, item)
 						{
@@ -236,7 +239,11 @@
 						var zAmount = options.zoom.amount;
 						var zCenter = options.zoom.center;
 
-						$('.powerPlot').not(this).zoom({center: zCenter, amount: zAmount});
+						for(var i in plots)
+						{
+							if(plots[i].getPlaceholder() == $(this)) continue;
+							plots[i].zoom({center: zCenter, amount: zAmount});
+						}
 					});
 				}, "json");
 			});
