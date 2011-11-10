@@ -239,17 +239,26 @@
 						if(!suppressZoom)
 						{
 							var options = plot.getOptions();
-							var zAmount = options.zoom.amount;
-							var zCenter = options.zoom.center;
-
-							console.log({center: zCenter, amount: zAmount});
+							var axes = plot.getAxes();
 
 							suppressZoom = true;
 
 							for(var i in plots)
 							{
 								if(plots[i].getPlaceholder().attr('id') == $(this).attr('id')) continue;
-								plots[i].zoom({center: zCenter, amount: zAmount});
+
+								var targetOptions = plots[i].getOptions();
+								var targetAxes = plots[i].getAxes();
+								var props = ['xaxis', 'x2axis', 'yaxis', 'y2axis'];
+
+								for(var k in props)
+								{
+									targetOptions[k].min = options[k].min;
+									targetOptions[k].max = options[k].max;
+								}
+
+								plots[i].setupGrid();
+								plots[i].draw();
 							}
 
 							suppressZoom = false;
