@@ -13,7 +13,7 @@
 
 			console.log(targetOptions);
 
-			plot.setupGrid();
+			//plot.setupGrid();
 			plot.draw();
 		}
 	}
