@@ -208,7 +208,7 @@
 							grid: { hoverable: true, clickable: true, markings: sensorData[k].markers }
 						});
 
-						plots.append(thisPlot);
+						plots.push(thisPlot);
 
 						$('#'+sensorData[k].domId).bind('plothover', function (event, pos, item)
 						{
