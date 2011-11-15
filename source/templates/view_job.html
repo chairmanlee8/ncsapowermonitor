@@ -22,6 +22,13 @@
 			{
 				font-family: sans-serif;
 				font-size: 14px;
+				margin-bottom: 5px;
+			}
+
+			.graphSubsubcaption
+			{
+				font-family: sans-serif;
+				font-size: 14px;
 				margin-bottom: 14px;
 			}
 
@@ -167,7 +174,7 @@
 						$('#graphContainer').append(
 							$('<div>')
 								.html('Total Power, Selection: ')
-								.addClass('graphSubcaption')
+								.addClass('graphSubsubcaption')
 								.attr('id', 'selectedPower' + sensorData[k].domId)
 						);
 
@@ -277,7 +284,7 @@
 							sum *= sensorData[k].voltage;
 
 							var totalPower = sum * (sensorData[k].data[sensorData[k].data.length-1][0] - sensorData[k].data[0][0]) / 3600.0;
-							$('#selectedPower' + sensorData[k].domId).html('Total Power, Selection: ' + totalPower.toFixed(2) + ' W-h');
+							$('.graphSubsubcaption').html('Total Power, Selection: ' + totalPower.toFixed(2) + ' W-h');
 						});
 					}
 
