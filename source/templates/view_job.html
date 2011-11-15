@@ -241,7 +241,7 @@
 								var cobj = data['markers'][i];
 								var xpos = joinTimestamp(cobj[0], cobj[1], basetime);
 
-								if(pos.x > xpos)
+								if(xpos > pos.x)
 								{
 									r = i;
 									break;
