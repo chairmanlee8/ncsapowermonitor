@@ -248,7 +248,11 @@
 							}
 
 							rend = (r + 1 == data['markers'].length) ? r : r + 1;
-							plots[i].reloadMarkings(sensorData[k].markers.concat([{xaxis: {from: data['markers'][r], to: data['markers'][rend]}, lineWidth: 1, color: "#000088"}]));
+
+							for(var i in plots)
+							{
+								plots[i].reloadMarkings(sensorData[k].markers.concat([{xaxis: {from: data['markers'][r], to: data['markers'][rend]}, lineWidth: 1, color: "#000088"}]));
+							}
 						});
 					}
 
