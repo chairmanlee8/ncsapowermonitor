@@ -266,21 +266,18 @@
 							}
 
 							// Calculate power consumption for selection
-							for(var k in sensorData)
+							var sum = 0.0;
+							for(var i in sensorData[k].data)
 							{
-								var sum = 0.0;
-								for(var i in sensorData[k].data)
-								{
-									if(sensorData[k].data[i][0] >= r && sensorData[k].data[i][0] <= rend)
-										sum += sensorData[k].data[i][1] / 1000.0;
-								}
-
-								sum /= sensorData[k].data.length;
-								sum *= sensorData[k].voltage;
-
-								var totalPower = sum * (sensorData[k].data[sensorData[k].data.length-1][0] - sensorData[k].data[0][0]) / 3600.0;
-								$('#selectedPower' + sensorData[k].domId).html('Total Power, Selection: ' + totalPower.toFixed(2) + ' W-h');
+								if(sensorData[k].data[i][0] >= r && sensorData[k].data[i][0] <= rend)
+									sum += sensorData[k].data[i][1] / 1000.0;
 							}
+
+							sum /= sensorData[k].data.length;
+							sum *= sensorData[k].voltage;
+
+							var totalPower = sum * (sensorData[k].data[sensorData[k].data.length-1][0] - sensorData[k].data[0][0]) / 3600.0;
+							$('#selectedPower' + sensorData[k].domId).html('Total Power, Selection: ' + totalPower.toFixed(2) + ' W-h');
 						});
 					}
 
