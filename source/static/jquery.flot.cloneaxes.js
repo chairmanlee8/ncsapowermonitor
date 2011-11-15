@@ -15,6 +15,8 @@
 		plot.reloadMarkings = function (newMarkings) {
 			plot.getOptions().grid.markings = newMarkings;
 
+			console.log(plot.getOptions().grid.markings);
+
 			plot.setupGrid();
 			plot.draw();
 		}
