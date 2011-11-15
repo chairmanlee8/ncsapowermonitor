@@ -240,17 +240,18 @@
 								var cobj = data['markers'][i];
 								var xpos = joinTimestamp(cobj[0], cobj[1], basetime);
 
-								if(pos.x > xpos)
+								if(xpos > pos.x)
 								{
-									r = Number(i);
+									r = Number(i) - 1;
 									break;
 								}
 							}
 
-							rend = (r + 1 == data['markers'].length) ? r : r + 1;
-							console.log(rend);
-							r = joinTimestamp(data['markers'][r][0], data['markers'][r][1], basetime);
-							rend = joinTimestamp(data['markers'][rend][0], data['markers'][rend][1], basetime);
+							if(r+1 == data['markers'].length) rend = joinTimestamp(data['markers'][r+1][0], data['markers'][r+1][1], basetime);
+							else rend = maxX;
+							
+							if(r < 0) r = 0;
+							else r = joinTimestamp(data['markers'][r][0], data['markers'][r][1], basetime);
 
 							for(var i in plots)
 							{
