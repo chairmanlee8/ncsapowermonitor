@@ -13,8 +13,8 @@
 		}
 
 		plot.reloadMarkings = function (newMarkings) {
-			plot.options.grid.markings = newMarkings;
-			
+			plot.getOptions().grid.markings = newMarkings;
+
 			plot.setupGrid();
 			plot.draw();
 		}
