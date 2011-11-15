@@ -234,7 +234,7 @@
 							}
 
 							// What markers is the mouse between? Then highlight.
-							var r = 0, rend = 0;
+							var r = data['markers'].length-1, rend = 0;
 							for(var i in data['markers'])
 							{
 								var cobj = data['markers'][i];
@@ -247,7 +247,7 @@
 								}
 							}
 
-							if(r+1 == data['markers'].length) rend = maxX;
+							if(r+1 >= data['markers'].length) rend = maxX;
 							else rend = joinTimestamp(data['markers'][r+1][0], data['markers'][r+1][1], basetime);
 
 							if(r < 0) r = 0;
