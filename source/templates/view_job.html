@@ -232,6 +232,23 @@
 									previousPoint = null;
 								}
 							}
+
+							// What markers is the mouse between? Then highlight.
+							var r = 0, rend = 0;
+							for(var i in data['markers'])
+							{
+								var cobj = data['markers'][i];
+								var xpos = joinTimestamp(cobj[0], cobj[1], basetime);
+
+								if(pos.x > xpos)
+								{
+									r = i;
+									break;
+								}
+							}
+
+							rend = (r + 1 == data['markers'].length) ? r : r + 1;
+							plots[i].reloadMarkings(sensorData[k].markers.concat([{xaxis: {from: data['markers'][r], to: data['markers'][rend]}, lineWidth: 1, color: "#000088"}]));
 						});
 					}
 

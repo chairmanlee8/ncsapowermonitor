@@ -51,7 +51,7 @@ def jobs_data(guid):
 	job = g.cur.fetchall()
 
 	# Get markers for this job_id
-	g.cur.execute('SELECT time_unix, time_ms, name, marker_type FROM marker_data WHERE guid = %s ORDER BY time_unix ASC', (guid,))
+	g.cur.execute('SELECT time_unix, time_ms, name, marker_type FROM marker_data WHERE guid = %s ORDER BY time_unix ASC, time_ms ASC', (guid,))
 	markers = g.cur.fetchall()
 
 	time_start = 0

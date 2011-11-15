@@ -11,6 +11,13 @@
 			plot.setupGrid();
 			plot.draw();
 		}
+
+		plot.reloadMarkings = function (newMarkings) {
+			plot.options.grid.markings = newMarkings;
+			
+			plot.setupGrid();
+			plot.draw();
+		}
 	}
 
 	$.plot.plugins.push({
