@@ -271,20 +271,6 @@
 							markerFieldset.append("<br/>");
 						}
 
-						$('.mreg').mouseover(function ()
-						{
-							for(var i in plots)
-							{
-								var markerId = $(this).attr("id");
-								var carray = [];
-								for(var j in markerRegions[markerId])
-								{
-									carray.push({xaxis: {from: markerRegions[markerId][j][0], to: markerRegions[markerId][j][1]}, lineWidth: 1, color: "#FFD9E2"});
-								}
-								plots[i].reloadMarkings(sensorData[k].markers.concat(carray));
-							}
-						});
-
 						$('#graphContainer').append(markerFieldset);
 						$('#graphContainer').append("<br/>");
 
@@ -399,6 +385,20 @@
 
 					$('.powerPlot').bind('plotzoom', syncAxes);
 					$('.powerPlot').bind('plotpan', syncAxes);
+
+					$('.mreg').mouseover(function ()
+					{
+						for(var i in plots)
+						{
+							var markerId = $(this).attr("id");
+							var carray = [];
+							for(var j in markerRegions[markerId])
+							{
+								carray.push({xaxis: {from: markerRegions[markerId][j][0], to: markerRegions[markerId][j][1]}, lineWidth: 1, color: "#FFD9E2"});
+							}
+							plots[i].reloadMarkings(sensorData[k].markers.concat(carray));
+						}
+					});
 				}, "json");
 			});
 		</script>
