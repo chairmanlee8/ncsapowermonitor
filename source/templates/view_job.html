@@ -277,7 +277,7 @@
 									{
 										carray.push({xaxis: {from: markerRegions[markerId][j][0], to: markerRegions[markerId][j][1]}, lineWidth: 1, color: "#FFD9E2"});
 									}
-
+									console.log(carray);
 									plots[i].reloadMarkings(sensorData[k].markers.concat(carray));
 								}
 							}));
