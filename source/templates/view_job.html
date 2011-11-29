@@ -99,15 +99,6 @@
 				.fadeIn(0);
 			}
 
-			function computeP(markerId, markers, sensorData)
-			{
-				// compute list of open marker (type 0) times
-				// compute list of close marker (type 1) times
-				// consolidate into disjoint regions (a,b) by algorithm
-
-				return "0 W-h";
-			}
-
 			$(window).ready(function ()
 			{
 				$.get("/jobs/{{ guid }}", function(data)
@@ -276,7 +267,7 @@
 
 						for(var markerId in uniqueMarkerIds)
 						{
-							markerFieldset.append($('<span>').text(markerId + ": " + markerRegionsPower[markerId][k]));
+							markerFieldset.append($('<span>').text(markerId + ": " + markerRegionsPower[markerId][k].toFixed(2) + " W-h"));
 							markerFieldset.append("<br/>");
 						}
 
