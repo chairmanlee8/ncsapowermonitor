@@ -77,6 +77,8 @@
 			var plots = [];
 			var suppressZoom = false;
 			var uniqueMarkerIds = {};
+			var markerRegions = {};
+			var markerRegionsPower = {};
 			
 			function showTooltip(x, y, contents)
 			{
@@ -99,6 +101,10 @@
 
 			function computeP(markerId, markers, sensorData)
 			{
+				// compute list of open marker (type 0) times
+				// compute list of close marker (type 1) times
+				// consolidate into disjoint regions (a,b) by algorithm
+
 				return "0 W-h";
 			}
 
@@ -157,6 +163,68 @@
 						}
 					}
 
+					for(var markerId in uniqueMarkerIds)
+					{
+						var thisMarkerOpenTimes = [];
+						var thisMarkerCloseTimes = [];
+
+						for(var i in data['markers'])
+						{
+							var cobj = data['markers'][i];
+							var xpos = joinTimestamp(cobj[0], cobj[1], basetime);
+
+							if(cobj[2] == markerId)
+							{
+								if(cobj[3] == 0) thisMarkerOpenTimes.push(xpos);
+								else if(cobj[3] == 1) thisMarkerCloseTimes.push(xpos);
+							}
+						}
+
+						var thisMarkerRegions = [];
+
+						for(var i = 0; i < thisMarkerOpenTimes.length; i++)
+						{
+							var x1 = thisMarkerOpenTimes[i];
+
+							// Find the closest close time by popping off the front
+							while(thisMarkerCloseTimes.length > 0)
+							{
+								var x2 = thisMarkerCloseTimes.shift();
+								if(x2 > x1)
+								{
+									thisMarkerRegions.push([x1,x2]);
+									break;
+								}
+							}
+						}
+
+						markerRegions[markerId] = thisMarkerRegions;
+						markerRegionsPower[markerId] = {};
+
+						// Now compute power
+						for(var k in sensorData)
+						{
+							var totalPower = 0.0;
+
+							for(var j in thisMarkerRegions)
+							{
+								var sum = 0.0;
+								for(var i in sensorData[k].data)
+								{
+									if(sensorData[k].data[i][0] >= thisMarkerRegions[j][0] && sensorData[k].data[i][0] <= thisMarkerRegions[j][1])
+										sum += sensorData[k].data[i][1] / 1000.0;
+								}
+
+								sum /= sensorData[k].data.length;
+								sum *= sensorData[k].voltage;
+
+								totalPower += sum * (thisMarkerRegions[j][1] - thisMarkerRegions[j][0]) / 3600.0;
+							}
+
+							markerRegionsPower[markerId][k] = totalPower;
+						}
+					}
+
 					// Calculate aggregate datas
 					for(var k in sensorData)
 					{
@@ -208,7 +276,7 @@
 
 						for(var markerId in uniqueMarkerIds)
 						{
-							markerFieldset.append($('<span>').text(markerId + ": " + computeP(markerId, data['markers'], sensorData[k])));
+							markerFieldset.append($('<span>').text(markerId + ": " + markerRegionsPower[markerId][k]));
 							markerFieldset.append("<br/>");
 						}
 
@@ -310,7 +378,7 @@
 							sum /= sensorData[k].data.length;
 							sum *= sensorData[k].voltage;
 
-							var totalPower = sum * (sensorData[k].data[sensorData[k].data.length-1][0] - sensorData[k].data[0][0]) / 3600.0;
+							var totalPower = sum * (rend - r) / 3600.0;
 							$('.graphSubsubcaption').html('Total Power, Selection: ' + totalPower.toFixed(2) + ' W-h');
 						});
 					}
