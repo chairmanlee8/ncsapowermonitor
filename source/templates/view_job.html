@@ -97,6 +97,11 @@
 				.fadeIn(0);
 			}
 
+			function computeP(markerId, markers, sensorData)
+			{
+				return "0 W-h";
+			}
+
 			$(window).ready(function ()
 			{
 				$.get("/jobs/{{ guid }}", function(data)
@@ -203,7 +208,8 @@
 
 						for(var markerId in uniqueMarkerIds)
 						{
-							markerFieldset.append($('<span>').text(markerId));
+							markerFieldset.append($('<span>').text(markerId + ": " + computeP(markerId, data['markers'], sensorData[k])));
+							markerFieldset.append("<br/>");
 						}
 
 						$('#graphContainer').append(markerFieldset);
