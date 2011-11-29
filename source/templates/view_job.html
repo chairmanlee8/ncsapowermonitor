@@ -267,7 +267,11 @@
 
 						for(var markerId in uniqueMarkerIds)
 						{
-							markerFieldset.append($('<span>').text(markerId + ": " + markerRegionsPower[markerId][k].toFixed(2) + " W-h"));
+							markerFieldset.append($('<span>').text(markerId + ": " + markerRegionsPower[markerId][k].toFixed(2) + " W-h")
+								.mouseover(function ()
+							{
+								alert("hello");
+							}));
 							markerFieldset.append("<br/>");
 						}
 
