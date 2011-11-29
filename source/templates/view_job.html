@@ -270,7 +270,16 @@
 							markerFieldset.append($('<span>').text(markerId + ": " + markerRegionsPower[markerId][k].toFixed(2) + " W-h")
 								.mouseover(function ()
 							{
-								alert("hello");
+								for(var i in plots)
+								{
+									var carray = [];
+									for(var j in markerRegions[markerId])
+									{
+										carray.push({xaxis: {from: markerRegions[markerId][j][0], to: markerRegions[markerId][j][1]}, lineWidth: 1, color: "#FFD9E2"});
+									}
+
+									plots[i].reloadMarkings(sensorData[k].markers.concat(carray));
+								}
 							}));
 							markerFieldset.append("<br/>");
 						}
