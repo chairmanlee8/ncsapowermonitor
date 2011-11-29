@@ -267,23 +267,25 @@
 
 						for(var markerId in uniqueMarkerIds)
 						{
-							markerFieldset.append($('<span>').text(markerId + ": " + markerRegionsPower[markerId][k].toFixed(2) + " W-h")
-								.mouseover(function ()
-							{
-								for(var i in plots)
-								{
-									var carray = [];
-									console.log(markerId);
-									for(var j in markerRegions[markerId])
-									{
-										carray.push({xaxis: {from: markerRegions[markerId][j][0], to: markerRegions[markerId][j][1]}, lineWidth: 1, color: "#FFD9E2"});
-									}
-									console.log(carray);
-									plots[i].reloadMarkings(sensorData[k].markers.concat(carray));
-								}
-							}));
+							markerFieldset.append($('<span class="mreg" id="'+markerId+'">').text(markerId + ": " + markerRegionsPower[markerId][k].toFixed(2) + " W-h");
 							markerFieldset.append("<br/>");
 						}
+
+						$('.mreg').mouseover(function ()
+						{
+							for(var i in plots)
+							{
+								var markerId = $(this).attr("id");
+								var carray = [];
+								console.log(markerId);
+								for(var j in markerRegions[markerId])
+								{
+									carray.push({xaxis: {from: markerRegions[markerId][j][0], to: markerRegions[markerId][j][1]}, lineWidth: 1, color: "#FFD9E2"});
+								}
+								console.log(carray);
+								plots[i].reloadMarkings(sensorData[k].markers.concat(carray));
+							}
+						});
 
 						$('#graphContainer').append(markerFieldset);
 						$('#graphContainer').append("<br/>");
