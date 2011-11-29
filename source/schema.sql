@@ -24,7 +24,7 @@ CREATE TABLE marker_data
 	time_unix		BIGINT,
 	time_ms			SMALLINT,
 	name			VARCHAR(64),
-	marker_type		SMALLINT,
+	marker_type		SMALLINT COMMENT "Canonical use is 0=open and 1=close (as though markers were parentheses)",
 	FOREIGN KEY (guid) REFERENCES job_data(guid)
 );
 
