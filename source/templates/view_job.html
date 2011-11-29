@@ -54,6 +54,7 @@
 
 			fieldset
 			{
+				font-family: sans-serif;
 				border-radius: 8px;
 				-webkit-border-radius: 8px;
 				-moz-border-radius: 8px;
@@ -75,6 +76,7 @@
 			var previousPoint = null;
 			var plots = [];
 			var suppressZoom = false;
+			var uniqueMarkerIds = {};
 			
 			function showTooltip(x, y, contents)
 			{
@@ -142,6 +144,8 @@
 						var cobj = data['markers'][i];
 						var xpos = joinTimestamp(cobj[0], cobj[1], basetime);
 
+						uniqueMarkerIds[cobj[2]] = true;
+
 						for(var k in sensorData)
 						{
 							sensorData[k].markers.push({xaxis: {from: xpos, to: xpos}, lineWidth: 1, color: "#000088"});
@@ -193,12 +197,16 @@
 								.css('height', '150px')
 						);
 
-						$('#graphContainer').append(
-							$('<fieldset>').append(
-								$('<legend>').text("Power consumption between markers")
-							)
+						var markerFieldset = $('<fieldset>').append(
+							$('<legend>').text("Power consumption between markers")
 						);
 
+						for(var markerId in uniqueMarkerIds)
+						{
+							markerFieldset.append($('<span>').text(markerId));
+						}
+
+						$('#graphContainer').append(markerFieldset);
 						$('#graphContainer').append("<br/>");
 
 						// Zoom/pan calculations
