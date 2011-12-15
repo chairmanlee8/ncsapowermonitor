@@ -59,6 +59,18 @@
 				-webkit-border-radius: 8px;
 				-moz-border-radius: 8px;
 			}
+
+			#dlRawData
+			{
+				background-image: url('/static/csv.png');
+				background-color: transparent;
+				background-repeat: no-repeat;
+				border: none;
+				cursor: pointer;
+				height: 32px;
+				padding-left: 32px;
+				vertical-align: middle;
+			}
 		</style>
 	</head>
 	
@@ -69,6 +81,9 @@
 				<a href="/"><img src="/static/home.png" style="width: 32px; height: 32px; margin-top: 0em;" /></a>
 			</div>
 			<div id="jobInfo"></div>
+			<div id="jobRawData">
+				<input type="button" id="dlRawData" value="Download Raw Data" />
+			</div>
 		</div>
 		
 		<script language="javascript" type="text/javascript">
@@ -262,7 +277,7 @@
 						);
 
 						var markerFieldset = $('<fieldset>').append(
-							$('<legend>').text("Power consumption between markers")
+							$('<legend>').text("Energy consumption between markers")
 						);
 
 						for(var markerId in uniqueMarkerIds)
@@ -370,7 +385,7 @@
 							sum *= sensorData[k].voltage;
 
 							var totalPower = sum * (rend - r) / 3600.0;
-							$('.graphSubsubcaption').html('Total Power, Selection: ' + totalPower.toFixed(2) + ' W-h');
+							$('.graphSubsubcaption').html('Total Energy, Selection: ' + totalPower.toFixed(2) + ' W-h');
 						});
 					}
 
