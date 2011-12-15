@@ -106,7 +106,7 @@ def jobs_data_csv(guid):
 
 	csv_string = "\"UNIX Time\",\"mA\",\"Volts\"\r\n"
 	for config_row in configs:
-		csv_string += "%s\r\n" % (config_row[0])
+		csv_string += "%s\r\n" % (config_row[2])
 		for data_row in data:
 			if data_row[0] == config_row[0]:
 				csv_string += "%f,%d,%d\r\n" % (float(data_row[1]) + float(data_row[2])/1000.0, data_row[3], config_row[1])
