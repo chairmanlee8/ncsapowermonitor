@@ -104,7 +104,7 @@ def jobs_data_csv(guid):
 	g.cur.execute('SELECT device_sensor, voltage, description FROM conf_data_sensor WHERE guid = %s ORDER BY device_sensor ASC', (guid,))
 	configs = g.cur.fetchall()
 
-	csv_string = "\"UNIX Time\",\"Amperage\",\"Voltage\"\r\n"
+	csv_string = "\"UNIX Time\",\"mA\",\"Volts\"\r\n"
 	for config_row in configs:
 		csv_string += "%s\r\n" % (config_row[0])
 		for data_row in data:
