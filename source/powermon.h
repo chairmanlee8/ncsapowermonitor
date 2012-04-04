@@ -23,7 +23,7 @@ typedef struct
 	char	job_process[256];
 } powermon_config_t;
 
-void powermon_config(powermon_config_t* pcfg, char* fn);
+int powermon_config(powermon_config_t* pcfg, char* fn);
 int powermon_start(powermon_config_t* pcfg);
 int powermon_mark(powermon_config_t* pcfg, const char* mark_name, int mark_type);
 int powermon_stop(powermon_config_t* pcfg);

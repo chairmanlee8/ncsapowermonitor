@@ -12,7 +12,7 @@
 
 pthread_t death_timer;
 
-void powermon_config(powermon_config_t* pcfg, char* fn)
+int powermon_config(powermon_config_t* pcfg, char* fn)
 {
 	/*
 		Reads a file with filename "fn" and fills a powermon_config_t struct with the
@@ -20,7 +20,10 @@ void powermon_config(powermon_config_t* pcfg, char* fn)
 	*/
 
 	FILE *fp = fopen(fn, "r");
-	if(!fp) return;
+	if(!fp) {
+		fprintf(stderr, "Failed to open configuration file.\n");
+		return 1;
+	}
 
 	int cin = 0;
 	char buffer[256] = "";
@@ -90,6 +93,7 @@ void powermon_config(powermon_config_t* pcfg, char* fn)
 	}
 
 	fclose(fp);
+	return 0;
 }
 
 int send_tcp_message(powermon_config_t* pcfg, const char* message)

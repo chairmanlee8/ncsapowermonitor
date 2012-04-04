@@ -21,14 +21,14 @@ from debug_print import debug_print
 BUFFER_UP_TIME = 5
 
 instance_conf = Configuration()
-device_handle = serial.Serial()
-device_thread = ReadDeviceThread()
+device_arr = {}		# [device_name: (serial.Serial(), ReadDeviceThread())]
 data_buffer = {}	# device_name: device_deque
 data_buffer_lock = threading.RLock()
 marker_up_buffer = []
 last_buffer_up = time.time()
 marker_buffer = []	# (marker_time, marker_name, marker_type)
 marker_buffer_lock = threading.RLock()
+job_counter = 0
 guid = 0
 db = None
 db_cursor = None
@@ -88,15 +88,20 @@ class ThreadedUDPServer(SocketServer.ThreadingMixIn, SocketServer.UDPServer):
 # (TCP) Keep-alive and Critical Requests Server
 
 def timeout():
-	debug_print("No ping for %d seconds, timeout." % instance_conf.keep_alive)
+	global device_thread
+	global job_counter
+	
+	debug_print("No ping for %d seconds, assume all jobs died, timeout." % instance_conf.keep_alive)
 	# Upload markers and pause
 	upload_markers(True)
+	job_counter = 0
 	device_thread.pause()
 
 class ThreadedTCPRequestHandler(SocketServer.BaseRequestHandler):
 	def handle(self):
 		global device_thread
 		global guid
+		global job_counter
 		
 		if not hasattr(self, 'death_timer'):
 			debug_print("Starting death timer interval %d seconds" % (instance_conf.keep_alive,))
@@ -125,6 +130,7 @@ class ThreadedTCPRequestHandler(SocketServer.BaseRequestHandler):
 				db.commit()
 				
 				device_thread.unpause()
+				job_counter += 1
 			elif data[0] == 'ping':
 				if self.death_timer is not None:
 					self.death_timer.cancel()
@@ -133,7 +139,9 @@ class ThreadedTCPRequestHandler(SocketServer.BaseRequestHandler):
 			elif data[0] == 'stop':
 				# Up the rest of the markers and pause
 				upload_markers(True)
-				device_thread.pause()
+				job_counter -= 1
+				if job_counter <= 0:
+					device_thread.pause()
 				
 			self.request.send("Command processed.")
 		except IndexError:
@@ -154,8 +162,8 @@ def cleanup():
 	db_cursor.close()
 
 if __name__ == "__main__":
-	if len(sys.argv) < 3:
-		sys.exit("Not enough arguments. Usage: %s <configuration file> <device name>")
+	if len(sys.argv) < 2:
+		sys.exit("Not enough arguments. Usage: %s <configuration file>")
 		
 	random.seed()
 	
@@ -166,14 +174,15 @@ if __name__ == "__main__":
 	db_cursor = db.cursor()
 	
 	# Open device
-	device_handle = serial.Serial(sys.argv[2])
-	
-	device_thread.set_device_handle(device_handle)
-	device_thread.set_data_buffer(data_buffer)
-	device_thread.set_data_buffer_lock(data_buffer_lock)
-	device_thread.start()
+	for k, v in instance_conf.devices:
+		device_arr[k] = (serial.Serial(k), ReadDeviceThread())
+		
+		device_arr[k][1].set_device_handle(device_handle)
+		device_arr[k][1].set_data_buffer(data_buffer)
+		device_arr[k][1].set_data_buffer_lock(data_buffer_lock)
+		device_arr[k][1].start()
 
-	debug_print("Device running in thread: %s" % device_thread.getName())
+		debug_print("Device running in thread: %s" % device_arr[k][1].getName())
 
 	# Open consumer
 	consumer = BufferConsumer(consume_period=3, data_buffer=data_buffer, data_buffer_lock=data_buffer_lock, db_connection=db, instance_config=instance_conf)
